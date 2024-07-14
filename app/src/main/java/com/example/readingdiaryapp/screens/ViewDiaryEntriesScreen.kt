@@ -6,17 +6,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.readingdiaryapp.DiaryEntry
 import com.example.readingdiaryapp.DiaryViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun ViewDiaryEntriesScreen(navController: NavController, diaryViewModel: DiaryViewModel) {
-    val diaryEntries = diaryViewModel.diaryEntries.value ?: listOf()
+    val diaryEntries by diaryViewModel.diaryEntries.observeAsState(emptyList())
 
     Scaffold(
         floatingActionButton = {
