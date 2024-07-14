@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,9 +19,25 @@ import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun ViewDiaryEntriesScreen(navController: NavController, diaryViewModel: DiaryViewModel) {
+    var searchQuery by remember { mutableStateOf("") }
     val diaryEntries by diaryViewModel.diaryEntries.observeAsState(emptyList())
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    TextField(
+                        value = searchQuery,
+                        onValueChange = { query ->
+                            searchQuery = query
+                            diaryViewModel.searchDiaryEntries(query)
+                        },
+                        placeholder = { Text("Search...") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate("add_entry") }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Entry")
